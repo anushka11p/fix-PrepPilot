@@ -1,4 +1,4 @@
-# 🎯 PrepPilot - AI-Powered Interview Preparation Platform
+# ![PrepPilot Logo](./frontend/public/PrepPilot-Logo.png) PrepPilot - AI-Powered Interview Preparation Platform
 
 <div align="center">
 
@@ -674,8 +674,8 @@ If PrepPilot helped you land that dream job or ace your interview, consider:
 
 ## 💖 Built with passion by developers, for developers
 
-[![GitHub followers](https://img.shields.io/github/followers/YOURUSERNAME?style=social&label=Follow)](https://github.com/YOURUSERNAME)
-[![GitHub stars](https://img.shields.io/github/stars/YOURUSERNAME/PrepPilot?style=social&label=Star)](https://github.com/YOURUSERNAME/PrepPilot)
+[![GitHub followers](https://img.shields.io/github/followers/karanunix?style=social&label=Follow)](https://github.com/karanunix)
+[![GitHub stars](https://img.shields.io/github/stars/YOURUSERNAME/PrepPilot?style=social&label=Star)](https://github.com/Canopus-Labs/PrepPilot)
 [![Twitter Follow](https://img.shields.io/twitter/follow/PrepPilot?style=social)](https://twitter.com/PrepPilot)
 
 ### Made with ❤️ for the tech community

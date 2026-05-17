@@ -20,7 +20,10 @@ const Navbar = () => {
   const [portalNode, setPortalNode] = useState(null);
   const { user } = useContext(UserContext);
   // Helper for initial letter or fallback
-  const userInitial = user?.name?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || 'U';
+  const userInitial =
+    user?.name?.charAt(0)?.toUpperCase() ||
+    user?.email?.charAt(0)?.toUpperCase() ||
+    "U";
   const navigate = useNavigate();
   const location = useLocation();
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -35,10 +38,10 @@ const Navbar = () => {
 
   // Ensure a single portal root for overlays (avoid duplicates if Navbar rendered more than once)
   useEffect(() => {
-    let node = document.getElementById('nav-portal-root');
+    let node = document.getElementById("nav-portal-root");
     if (!node) {
-      node = document.createElement('div');
-      node.id = 'nav-portal-root';
+      node = document.createElement("div");
+      node.id = "nav-portal-root";
       document.body.appendChild(node);
     }
     setPortalNode(node);
@@ -48,8 +51,10 @@ const Navbar = () => {
   useEffect(() => {
     if (mobileMenuOpen) {
       const original = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      return () => { document.body.style.overflow = original; };
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = original;
+      };
     }
   }, [mobileMenuOpen]);
 
@@ -57,12 +62,15 @@ const Navbar = () => {
     <>
       {/* Navbar Wrapper */}
       <div className="w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-white/5 shadow-sm dark:shadow-[0_4px_30px_rgb(0,0,0,0.5)] transition-colors duration-300">
-        
         {/* Glass Container */}
         <div className="h-16 w-full max-w-[1400px] mx-auto flex items-center justify-between px-5 md:px-8 transition-colors duration-300">
-          
           {/* Logo */}
-          <Link to="/" className="flex-shrink-0">
+          <Link to="/" className="flex items-center gap-2 flex-shrink-0">
+            <img
+              src="/PrepPilot-Logo.png"
+              alt="PrepPilot Logo"
+              className="w-7 h-7 object-contain"
+            />
             <h2 className="text-xl md:text-[22px] font-extrabold text-gray-900 dark:text-white tracking-tight transition-colors duration-300">
               PrepPilot{" "}
               <span className="text-violet-600 dark:text-violet-400 drop-shadow-[0_0_8px_rgba(167,139,250,0.2)]">
@@ -80,12 +88,30 @@ const Navbar = () => {
             aria-controls="mobile-nav-drawer"
           >
             {mobileMenuOpen ? (
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             ) : (
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                width="26"
+                height="26"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <line x1="3" y1="12" x2="21" y2="12" />
                 <line x1="3" y1="6" x2="21" y2="6" />
                 <line x1="3" y1="18" x2="21" y2="18" />
@@ -101,7 +127,11 @@ const Navbar = () => {
 
               if (service.title === "DSA Master Sheets") {
                 return (
-                  <Link to={service.path} key={service.id} className={linkClasses}>
+                  <Link
+                    to={service.path}
+                    key={service.id}
+                    className={linkClasses}
+                  >
                     {service.title}
                   </Link>
                 );
@@ -126,8 +156,10 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-        {/* Mobile Menu Drawer */}
-        {portalNode && mobileMenuOpen && createPortal(
+      {/* Mobile Menu Drawer */}
+      {portalNode &&
+        mobileMenuOpen &&
+        createPortal(
           <div className="fixed inset-0 z-[999] md:hidden">
             <div
               className="absolute inset-0 bg-gray-900/50 dark:bg-black/60 backdrop-blur-sm"
@@ -136,7 +168,7 @@ const Navbar = () => {
             <nav
               id="mobile-nav-drawer"
               className="absolute top-0 right-0 h-full w-4/5 max-w-sm bg-white dark:bg-[#0f172a] shadow-2xl flex flex-col pt-5 pb-8 px-6 overflow-y-auto border-l border-gray-200 dark:border-white/10 transition-transform duration-300 will-change-transform data-[state=closed]:translate-x-full"
-              data-state={mobileMenuOpen ? 'open' : 'closed'}
+              data-state={mobileMenuOpen ? "open" : "closed"}
             >
               <div className="flex items-start justify-between mb-4">
                 {/* Profile Section */}
@@ -160,7 +192,7 @@ const Navbar = () => {
                   )}
                   <div className="flex flex-col leading-tight">
                     <span className="text-[15px] font-bold text-gray-900 dark:text-white max-w-[150px] truncate">
-                      {user ? (user.name || user.email) : 'Guest User'}
+                      {user ? user.name || user.email : "Guest User"}
                     </span>
                     {user ? (
                       <button
@@ -190,29 +222,43 @@ const Navbar = () => {
                   aria-label="Close menu"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
                     <line x1="18" y1="6" x2="6" y2="18" />
                     <line x1="6" y1="6" x2="18" y2="18" />
                   </svg>
                 </button>
               </div>
-              
+
               {/* Divider */}
               <div className="w-full h-px bg-gray-100 dark:bg-white/10 mb-4" />
-              
+
               {/* Theme Toggle in Mobile Menu */}
               <div className="flex items-center justify-between px-3 py-3 rounded-lg bg-gray-50 dark:bg-white/5 mb-5 border border-gray-100 dark:border-white/5">
-                <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Appearance</span>
+                <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  Appearance
+                </span>
                 <ThemeToggle />
               </div>
-              
+
               <ul className="flex flex-col gap-1.5">
                 {SERVICES.map((service) => {
                   const isActive = location.pathname === service.path;
-                  const baseClasses = "block w-full text-left px-5 py-3.5 rounded-xl text-sm font-bold tracking-wide transition-all";
-                  const activeClasses = "bg-violet-50 text-violet-700 dark:bg-violet-500/10 dark:text-violet-300 border border-violet-100 dark:border-violet-500/20";
-                  const idleClasses = "text-gray-600 dark:text-gray-400 hover:bg-gray-50 hover:text-gray-900 dark:hover:bg-white/5 dark:hover:text-white border border-transparent";
-                  
+                  const baseClasses =
+                    "block w-full text-left px-5 py-3.5 rounded-xl text-sm font-bold tracking-wide transition-all";
+                  const activeClasses =
+                    "bg-violet-50 text-violet-700 dark:bg-violet-500/10 dark:text-violet-300 border border-violet-100 dark:border-violet-500/20";
+                  const idleClasses =
+                    "text-gray-600 dark:text-gray-400 hover:bg-gray-50 hover:text-gray-900 dark:hover:bg-white/5 dark:hover:text-white border border-transparent";
+
                   if (service.title === "DSA Master Sheets") {
                     return (
                       <li key={service.id}>
@@ -241,17 +287,18 @@ const Navbar = () => {
                   );
                 })}
               </ul>
-              
+
               <div className="mt-auto pt-6 pb-2">
                 <div className="bg-gradient-to-br from-violet-50 to-fuchsia-50 dark:from-violet-900/10 dark:to-fuchsia-900/10 p-4 rounded-xl border border-violet-100/50 dark:border-white/5">
                   <p className="text-[11px] text-violet-700/80 dark:text-white/50 leading-relaxed font-medium">
-                    Master your skills with AI-driven interview preparation and comprehensive DSA master sheets.
+                    Master your skills with AI-driven interview preparation and
+                    comprehensive DSA master sheets.
                   </p>
                 </div>
               </div>
             </nav>
           </div>,
-          portalNode
+          portalNode,
         )}
 
       {/* Login Modal */}

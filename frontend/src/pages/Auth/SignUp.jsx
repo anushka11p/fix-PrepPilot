@@ -1,59 +1,61 @@
-import React, { useContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import Input from '../../components/Inputs/Input';
-import ProfilePhotoSelector from '../../components/Inputs/ProfilePhotoSelector';
-import { validateEmail } from '../../utils/helper';
-import axiosInstance from '../../utils/axiosinstance';
-import { API_PATHS } from '../../utils/apiPaths';
-import { UserContext } from '../../context/userContext';
-import uploadImage from '../../utils/uploadimage';
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Input from "../../components/Inputs/Input";
+import ProfilePhotoSelector from "../../components/Inputs/ProfilePhotoSelector";
+import { validateEmail } from "../../utils/helper";
+import axiosInstance from "../../utils/axiosinstance";
+import { API_PATHS } from "../../utils/apiPaths";
+import { UserContext } from "../../context/userContext";
+import uploadImage from "../../utils/uploadimage";
+import { LuArrowRight } from "react-icons/lu";
 
-import axios from 'axios';
-const SignUp = ({setCurrentPage}) => {
-  const [profilePic,setProfilePic] = useState(null);
-  const[fullName, setFullName] = useState("")
-  const [email,setEmail]= useState("");
-  const [password,setPassword] = useState("");
+const SignUp = ({ setCurrentPage }) => {
+  const [profilePic, setProfilePic] = useState(null);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const {updateUser} = useContext(UserContext);
+  const { updateUser } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const handleSignup= async (e) =>{
+  const handleSignup = async (e) => {
     e.preventDefault();
 
-    let profileImageUrl="";
+    let profileImageUrl = "";
 
-    if(!fullName){
-      setError("Please enter full name.");
+    if (!fullName) {
+      setError("Please enter your full name");
       return;
     }
-    if(!validateEmail(email)){
-      setError("Please enter a vaild email address");
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address");
       return;
     }
-    if(!password){
-      setError("Please enter the password");
+    if (!password) {
+      setError("Please enter a password (min 8 characters)");
       return;
     }
     setError("");
+    setLoading(true);
 
-    //Signup API call
     try {
-      if(profilePic){
-        const imgUploadRes =  await uploadImage(profilePic);
-        profileImageUrl= imgUploadRes.imageUrl ||"";
+      if (profilePic) {
+        const imgUploadRes = await uploadImage(profilePic);
+        profileImageUrl = imgUploadRes.imageUrl || "";
       }
 
       const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
         name: fullName,
         email,
         password,
-        profileImageUrl: profileImageUrl || ""
+        profileImageUrl: profileImageUrl || "",
       });
-      const {token} = response.data;
-      if(token){
-        localStorage.setItem("token",token);
+
+      const { token } = response.data;
+      if (token) {
+        localStorage.setItem("token", token);
         updateUser(response.data);
         navigate("/dashboard");
       }
@@ -63,57 +65,110 @@ const SignUp = ({setCurrentPage}) => {
       } else {
         setError("Something went wrong. Please try again");
       }
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
-  <div className='w-full max-w-md p-3 flex flex-col justify-center mx-auto'>
-      <h3 className='text-lg font-semibold text-black'>Create an Account</h3>
-      <p className='text-xs text-slate-700 mt-[5px] mb-6'>
-        Join us today by entering your details below.
-      </p>
-      <form onSubmit={handleSignup}>
+    <div className="w-full">
+      {/* Header */}
+      <div className="mb-8">
+        <div className="flex items-center gap-2 mb-3">
+          <img
+            src="/PrepPilot-Logo.png"
+            alt="PrepPilot Logo"
+            className="w-8 h-8 object-contain"
+          />
+          <span className="font-semibold text-gray-300">PrepPilot</span>
+        </div>
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-violet-300 to-blue-300 bg-clip-text text-transparent mb-2">
+          Create Account
+        </h2>
+        <p className="text-sm text-gray-400">
+          Join thousands preparing smarter for their dream jobs
+        </p>
+      </div>
 
-        <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
+      {/* Form */}
+      <form onSubmit={handleSignup} className="space-y-4">
+        {/* Profile Photo */}
+        <div className="mb-6">
+          <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
+        </div>
 
-        <div className='grid grid-cols-1 md:grid-cols-1 gap-2'>
-          <Input 
+        {/* Full Name Input */}
+        <Input
           value={fullName}
-          onChange={({target})=> setFullName(target.value)}
+          onChange={({ target }) => setFullName(target.value)}
           label="Full Name"
-          placeholder="Jhon"
-          type="text"/>
-          <Input
+          placeholder="John Doe"
+          type="text"
+        />
+
+        {/* Email Input */}
+        <Input
           value={email}
-          onChange={({target})=> setEmail(target.value)}
+          onChange={({ target }) => setEmail(target.value)}
           label="Email Address"
-          placeholder="Raquel@gmail.com"
-          type="text"/>
-          <Input
+          placeholder="your@email.com"
+          type="text"
+        />
+
+        {/* Password Input */}
+        <Input
           value={password}
-          onChange={({target})=> setPassword(target.value)}
+          onChange={({ target }) => setPassword(target.value)}
           label="Password"
           placeholder="Min 8 characters"
           type="password"
-          />
+        />
 
-        </div>
-        {error && <p className='text-red-500 text-xs pb-2.5'>{error}</p>}
-        <button type='submit' className='btn-primary'>
-          SIGN UP
+        {/* Error Message */}
+        {error && (
+          <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+            <p className="text-red-400 text-sm font-medium">{error}</p>
+          </div>
+        )}
+
+        {/* Sign Up Button */}
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full mt-6 flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-500 hover:to-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 group"
+        >
+          {loading ? (
+            <>
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              Creating account...
+            </>
+          ) : (
+            <>
+              Create Account
+              <LuArrowRight className="text-base group-hover:translate-x-1 transition-transform" />
+            </>
+          )}
         </button>
-        <p className='text-[13px] text-slate-800 mt-3'>
-          Already an account?{" "}
-          <button
-          type="button"
-          className='font-medium text-primary underline cursor-pointer'
-          onClick={()=>{
-            setCurrentPage("login");
-          }}
-          >Login</button>
-        </p>
+
+        {/* Login Link */}
+        <div className="mt-6 pt-4 border-t border-white/10">
+          <p className="text-sm text-gray-400 text-center">
+            Already have an account?{" "}
+            <button
+              type="button"
+              className="font-semibold text-transparent bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text hover:opacity-80 transition-opacity cursor-pointer"
+              onClick={() => {
+                setCurrentPage("login");
+                setError(null);
+              }}
+            >
+              Sign in
+            </button>
+          </p>
+        </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;

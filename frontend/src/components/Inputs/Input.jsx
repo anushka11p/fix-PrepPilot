@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+
 const Input = ({ value, onChange, label, placeholder, type }) => {
   const [showPassword, setShowpassword] = useState(false);
   const toggleShowPassword = () => {
@@ -7,28 +8,29 @@ const Input = ({ value, onChange, label, placeholder, type }) => {
   };
 
   return (
-    <div className="mb-4 w-full min-w-0">
-      <label className="text-[13px] text-slate-800 block mb-1">{label}</label>
-      <div className="relative flex items-center w-full min-w-0">
+    <div className="mb-5 w-full min-w-0">
+      <label className="text-xs font-semibold text-gray-300 block mb-2">
+        {label}
+      </label>
+      <div className="relative flex items-center w-full min-w-0 group">
         <input
           type={
             type === "password" ? (showPassword ? "text" : "password") : type
           }
           placeholder={placeholder}
-          className="w-full min-w-0 bg-white border border-gray-300 rounded-md py-2 px-3 pr-10 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition"
+          className="w-full min-w-0 bg-white/5 border border-white/15 hover:border-white/25 focus:border-violet-500/50 rounded-lg py-2.5 px-4 pr-10 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all duration-200"
           value={value}
           onChange={(e) => onChange(e)}
         />
         {type === "password" && (
-          <span className="absolute right-3 cursor-pointer select-none" onClick={toggleShowPassword}>
+          <span
+            className="absolute right-3 cursor-pointer select-none text-gray-400 hover:text-gray-300 transition-colors"
+            onClick={toggleShowPassword}
+          >
             {showPassword ? (
-              <FaRegEye size={20} className="text-primary"
-              onClick={()=>toggleShowPassword()} 
-              />
+              <FaRegEye size={18} />
             ) : (
-              <FaRegEyeSlash size={20} className="text-slate-400" 
-              onClick={()=>toggleShowPassword()} 
-              />
+              <FaRegEyeSlash size={18} />
             )}
           </span>
         )}

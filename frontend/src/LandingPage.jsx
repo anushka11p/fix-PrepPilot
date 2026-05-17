@@ -182,21 +182,13 @@ const LandingPage = () => {
               boxShadow: "0 2px 24px 0 rgba(0,0,0,0.30)",
             }}
           >
-            {/* Logo – purple circle ring + text (opensox style) */}
+            {/* Logo – with PrepPilot-Logo.png */}
             <div className="flex items-center gap-2.5 flex-shrink-0">
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)",
-                  boxShadow:
-                    "0 0 0 2px rgba(139,92,246,0.35), inset 0 0 0 2px rgba(255,255,255,0.15)",
-                }}
-              >
-                <span className="text-white font-black text-sm tracking-tighter">
-                  P
-                </span>
-              </div>
+              <img
+                src="/PrepPilot-Logo.png"
+                alt="PrepPilot Logo"
+                className="w-8 h-8 object-contain"
+              />
               <span className="font-bold text-[15px] text-white tracking-tight whitespace-nowrap">
                 PrepPilot <span className="text-violet-400">AI</span>
               </span>
@@ -833,9 +825,11 @@ const LandingPage = () => {
         ───────────────────────────────── */}
         <footer className="border-t border-white/6 py-8 px-4 text-center text-sm text-gray-500">
           <div className="flex items-center justify-center gap-2 mb-2">
-            <div className="w-5 h-5 rounded-md bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center">
-              <LuSparkles className="text-white text-[10px]" />
-            </div>
+            <img
+              src="/PrepPilot-Logo.png"
+              alt="PrepPilot Logo"
+              className="w-5 h-5 object-contain"
+            />
             <span className="font-semibold text-gray-400">PrepPilot AI</span>
           </div>
           <p>© {new Date().getFullYear()} PrepPilot AI. All rights reserved.</p>

@@ -282,6 +282,11 @@ const Sidebar = () => {
           className="flex items-center gap-2"
           onClick={() => setMobileMenuOpen(false)}
         >
+          <img
+            src="/PrepPilot-Logo.png"
+            alt="PrepPilot Logo"
+            className="w-7 h-7 object-contain"
+          />
           <h2 className="text-[22px] font-extrabold text-white tracking-tight">
             PrepPilot{" "}
             <span className="text-violet-500 drop-shadow-[0_0_8px_rgba(167,139,250,0.3)]">

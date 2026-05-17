@@ -185,10 +185,10 @@ html.dark {
   @keyframes cta-glow {
     0%,
     100% {
-      box-shadow: 0 0 16px 2px rgba(139, 139, 226, 0.5);
+      box-shadow: 0 0 8px 1px rgba(139, 139, 226, 0.3);
     }
     50% {
-      box-shadow: 0 0 32px 8px rgba(139, 139, 226, 0.8);
+      box-shadow: 0 0 16px 3px rgba(139, 139, 226, 0.5);
     }
   }
   .cta-glow {
