@@ -1,6 +1,10 @@
 const Session = require("../models/Session");
 const Question = require("../models/Question");
 
+
+const MAX_SESSIONS = Number(process.env.MAX_SESSIONS) || 50;;
+
+
 // @desc    Create a new session and linked questions
 // @route   POST /api/sessions/create
 // @access  Private
@@ -8,6 +12,21 @@ exports.createSession = async (req, res) => {
   try {
   const {role , experience , topicsToFocus , description , question }= req.body;
     const userId = req.user._id || req.user.id; // support both _id and id
+
+    // Count existing sessions for this user
+    const sessionCount = await Session.countDocuments({
+      user: userId,
+    });
+
+    // Check session limit
+    if (sessionCount >= MAX_SESSIONS) {
+      return res.status(403).json({
+        success: false,
+        message: `Session limit reached. You already have ${sessionCount} sessions. Please delete old sessions before creating new ones.`,
+        currentCount: sessionCount,
+        maxLimit: MAX_SESSIONS,
+      });
+    }
 
   const session = await Session.create({
     user : userId,
