@@ -378,7 +378,7 @@ const LandingPage = () => {
                 style={{
                   background: "rgba(15,15,20,0.90)",
                   border: "1px solid rgba(255,255,255,0.08)",
-                  minHeight: "600px",
+                  minHeight: "700px",
                 }}
               >
                 {/* Card interior – stacked list items */}
@@ -448,7 +448,7 @@ const LandingPage = () => {
                 style={{
                   background: "rgba(15,15,20,0.90)",
                   border: "1px solid rgba(255,255,255,0.08)",
-                  minHeight: "600px",
+                  minHeight: "700px",
                 }}
               >
                 {/* Orbit visual */}
@@ -536,7 +536,7 @@ const LandingPage = () => {
                 style={{
                   background: "rgba(15,15,20,0.90)",
                   border: "1px solid rgba(255,255,255,0.08)",
-                  minHeight: "600px",
+                  minHeight: "700px",
                 }}
               >
                 {/* Filter chips interior */}
