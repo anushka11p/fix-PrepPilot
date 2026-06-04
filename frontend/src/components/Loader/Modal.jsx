@@ -1,8 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { modalVariants, backdropVariants } from "../../utils/animations";
 
 const Modal = ({ children, isOpen, onClose, title, hideHeader }) => {
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+  
+    if (isOpen) {
+      document.addEventListener("keydown", handleEsc);
+    }
+  
+    return () => {
+      document.removeEventListener("keydown", handleEsc);
+    };
+  }, [isOpen, onClose]);
+
   return (
     <AnimatePresence>
       {isOpen && (
