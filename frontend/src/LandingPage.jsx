@@ -932,11 +932,12 @@ const LandingPage = () => {
         hideHeader
       >
         <div>
-          {currentPage === "login" && (
+          <div className={currentPage === "login" ? "block" : "hidden"}>
             <Login
               setCurrentPage={setCurrentPage}
               onLoginSuccess={() => {
                 setOpenAuthModal(false);
+          
                 if (pendingRoute) {
                   navigate(pendingRoute);
                   setPendingRoute(null);
@@ -945,10 +946,11 @@ const LandingPage = () => {
                 }
               }}
             />
-          )}
-          {currentPage === "signup" && (
+          </div>
+          
+          <div className={currentPage === "signup" ? "block" : "hidden"}>
             <SignUp setCurrentPage={setCurrentPage} />
-          )}
+          </div>
         </div>
       </Modal>
     </>
