@@ -81,6 +81,7 @@ const Login = ({ setCurrentPage, onLoginSuccess }) => {
       {/* Form */}
       <form onSubmit={handleLogin} className="space-y-4">
         <Input
+
   value={email}
   onChange={({ target }) => setEmail(target.value)}
   label="Email Address"
@@ -93,6 +94,15 @@ const Login = ({ setCurrentPage, onLoginSuccess }) => {
       : undefined
   }
 />
+
+          value={email}
+          onChange={({ target }) => setEmail(target.value)}
+          label="Email Address"
+          placeholder="your@email.com"
+          type="text"
+          autoFocus
+        />
+
 
         <Input
   value={password}
