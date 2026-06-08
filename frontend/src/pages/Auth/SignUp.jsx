@@ -17,6 +17,10 @@ const SignUp = ({ setCurrentPage }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendError, setResendError] = useState("");
+  const [resendCooldown, setResendCooldown] = useState(0);
 
   const { updateUser } = useContext(UserContext);
   const navigate = useNavigate();
@@ -70,11 +74,13 @@ const SignUp = ({ setCurrentPage }) => {
         profileImageUrl: profileImageUrl || "",
       });
 
-      const { token } = response.data;
-      if (token) {
-        localStorage.setItem("token", token);
-        updateUser(response.data);
-        navigate("/dashboard");
+      // Backend no longer returns a token on register — email must be verified first
+      if (response.data.success) {
+        setSuccessMessage(response.data.message);
+        setFullName("");
+        setPassword("");
+        setProfilePic(null);
+        // Keep email in state so resend handler can use it
       }
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -84,6 +90,28 @@ const SignUp = ({ setCurrentPage }) => {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    setResendLoading(true);
+    setResendError("");
+    try {
+      await axiosInstance.post(API_PATHS.AUTH.RESEND_VERIFICATION, { email });
+      // Start 60 second cooldown to prevent spam clicking
+      setResendCooldown(60);
+      const interval = setInterval(() => {
+        setResendCooldown((prev) => {
+          if (prev <= 1) { clearInterval(interval); return 0; }
+          return prev - 1;
+        });
+      }, 1000);
+    } catch (error) {
+      setResendError(
+        error.response?.data?.message || "Failed to resend. Please try again."
+      );
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -107,76 +135,125 @@ const SignUp = ({ setCurrentPage }) => {
         </p>
       </div>
 
-      {/* Form */}
-      <form onSubmit={handleSignup} className="space-y-4">
-        {/* Profile Photo */}
-        <div className="mb-6">
-          <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
-        </div>
-
-        {/* Full Name Input */}
-        <Input
-          value={fullName}
-          onChange={({ target }) => setFullName(target.value)}
-          label="Full Name"
-          placeholder="John Doe"
-          type="text"
-          autoFocus
-        />
-
-        {/* Email Input */}
-        <Input
-          value={email}
-          onChange={({ target }) => setEmail(target.value)}
-          label="Email Address"
-          placeholder="your@email.com"
-          type="text"
-        />
-
-        {/* Password Input */}
-        <Input
-          value={password}
-          onChange={({ target }) => setPassword(target.value)}
-          label="Password"
-          placeholder="Min 8 characters"
-          type="password"
-        />
-
-        {/* Error Message */}
-        {error && (
-          <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
-            <p className="text-red-400 text-sm font-medium">{error}</p>
+      {/* Success state — shown after registration, replaces the form */}
+      {successMessage ? (
+        <div className="space-y-4">
+          <div className="p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
+            <p className="text-green-400 text-sm font-medium">{successMessage}</p>
+            <p className="text-green-400/70 text-xs mt-1">
+              Didn't receive it? Check your spam folder.
+            </p>
           </div>
-        )}
 
-        {/* Sign Up Button */}
-        <Button
-          type="submit"
-          loading={loading}
-          loadingText="Creating account..."
-          icon={<LuArrowRight className="group-hover:translate-x-1 transition-transform" />}
-          className="mt-6"
-        >
-          Create Account
-        </Button>
+          {/* Resend button with cooldown timer */}
+          <button
+            type="button"
+            disabled={resendLoading || resendCooldown > 0}
+            onClick={handleResend}
+            className="w-full text-sm text-violet-400 hover:text-violet-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          >
+            {resendLoading
+              ? "Sending..."
+              : resendCooldown > 0
+              ? `Resend email (${resendCooldown}s)`
+              : "Resend verification email"}
+          </button>
 
-        {/* Login Link */}
-        <div className="mt-6 pt-4 border-t border-white/10">
-          <p className="text-sm text-gray-400 text-center">
-            Already have an account?{" "}
-            <button
-              type="button"
-              className="font-semibold text-transparent bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text hover:opacity-80 transition-opacity cursor-pointer"
-              onClick={() => {
-                setCurrentPage("login");
-                setError(null);
-              }}
-            >
-              Sign in
-            </button>
-          </p>
+          {/* Resend error */}
+          {resendError && (
+            <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+              <p className="text-red-400 text-sm font-medium">{resendError}</p>
+            </div>
+          )}
+
+          <div className="pt-4 border-t border-white/10">
+            <p className="text-sm text-gray-400 text-center">
+              Already verified?{" "}
+              <button
+                type="button"
+                className="font-semibold text-transparent bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text hover:opacity-80 transition-opacity cursor-pointer"
+                onClick={() => {
+                  setCurrentPage("login");
+                  setSuccessMessage("");
+                }}
+              >
+                Sign in
+              </button>
+            </p>
+          </div>
         </div>
-      </form>
+      ) : (
+        /* Registration form */
+        <form onSubmit={handleSignup} className="space-y-4">
+          {/* Profile Photo */}
+          <div className="mb-6">
+            <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
+          </div>
+
+          {/* Full Name Input */}
+          <Input
+            value={fullName}
+            onChange={({ target }) => setFullName(target.value)}
+            label="Full Name"
+            placeholder="John Doe"
+            type="text"
+            autoFocus
+          />
+
+          {/* Email Input */}
+          <Input
+            value={email}
+            onChange={({ target }) => setEmail(target.value)}
+            label="Email Address"
+            placeholder="your@email.com"
+            type="text"
+          />
+
+          {/* Password Input */}
+          <Input
+            value={password}
+            onChange={({ target }) => setPassword(target.value)}
+            label="Password"
+            placeholder="Min 8 characters"
+            type="password"
+          />
+
+          {/* Error Message */}
+          {error && (
+            <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+              <p className="text-red-400 text-sm font-medium">{error}</p>
+            </div>
+          )}
+
+          {/* Sign Up Button */}
+          <Button
+            type="submit"
+            loading={loading}
+            loadingText="Creating account..."
+            icon={<LuArrowRight className="group-hover:translate-x-1 transition-transform" />}
+            className="mt-6"
+          >
+            Create Account
+          </Button>
+
+          {/* Login Link */}
+          <div className="mt-6 pt-4 border-t border-white/10">
+            <p className="text-sm text-gray-400 text-center">
+              Already have an account?{" "}
+              <button
+                type="button"
+                className="font-semibold text-transparent bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text hover:opacity-80 transition-opacity cursor-pointer"
+                onClick={() => {
+                  setCurrentPage("login");
+                  setError(null);
+                }}
+              >
+                Sign in
+              </button>
+            </p>
+          </div>
+        </form>
+      )}
     </div>
   );
 };

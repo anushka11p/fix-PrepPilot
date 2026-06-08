@@ -1,5 +1,5 @@
 const express = require("express");
-const { registerUser, loginUser, getUserProfile, updateUserProfile, changePassword, deleteUserAccount } = require("../controllers/authController");
+const { registerUser, loginUser,verifyEmail, resendVerificationEmail, getUserProfile, updateUserProfile, changePassword, deleteUserAccount } = require("../controllers/authController");
 const { protect } = require("../middlewares/authMiddleware");
 const { upload } = require("../middlewares/uploadMiddleware");
 const router = express.Router();
@@ -12,6 +12,8 @@ router.get("/profile", protect, getUserProfile);
 router.put("/profile", protect, updateUserProfile);
 router.put("/change-password", protect, changePassword);
 router.delete("/delete-account", protect, deleteUserAccount);
+router.post("/resend-verification", authLimiter, resendVerificationEmail);
+router.get("/verify-email", verifyEmail);
 
 /**
  * Upload a user profile image.
