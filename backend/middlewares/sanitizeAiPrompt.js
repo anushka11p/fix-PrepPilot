@@ -1,18 +1,26 @@
 
 const sanitizeAiPrompt = (req, res, next) => {
-  if (req.body && typeof req.body.prompt === "string") {
-    req.body.prompt = req.body.prompt
-      .replace(/<[^>]*>?/gm, "")        // remove HTML tags
-      .replace(/[^\x20-\x7E\n]/g, "")   // remove hidden control chars
-      .trim();
+  if (req.body) {
+    if (typeof req.body.prompt === "string") {
+      req.body.prompt = req.body.prompt
+        .replace(/<[^>]*>?/gm, "")        // remove HTML tags
+        .replace(/[^\x20-\x7E\n]/g, "")   // remove hidden control chars
+        .trim();
+    }
+    
+    if (typeof req.body.role === "string") {
       req.body.role = req.body.role
-      .replace(/<[^>]*>?/gm, "")        // remove HTML tags
-      .replace(/[^\x20-\x7E\n]/g, "")   // remove hidden control chars
-      .trim();
+        .replace(/<[^>]*>?/gm, "")        // remove HTML tags
+        .replace(/[^\x20-\x7E\n]/g, "")   // remove hidden control chars
+        .trim();
+    }
+    
+    if (typeof req.body.topic === "string") {
       req.body.topic = req.body.topic
-      .replace(/<[^>]*>?/gm, "")        // remove HTML tags
-      .replace(/[^\x20-\x7E\n]/g, "")   // remove hidden control chars
-      .trim();
+        .replace(/<[^>]*>?/gm, "")        // remove HTML tags
+        .replace(/[^\x20-\x7E\n]/g, "")   // remove hidden control chars
+        .trim();
+    }
   }
 
   next();
