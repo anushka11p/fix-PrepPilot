@@ -74,7 +74,11 @@ const App = () => {
                   element={
                     <ErrorBoundary>
                       <PageTransition>
-                        <Login />
+                        <div className="min-h-screen w-full flex items-center justify-center bg-[#0B0F19] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1a1a2e] via-[#0B0F19] to-[#05080f]">
+                          <div className="w-full max-w-[420px] rounded-2xl p-6 sm:p-8 shadow-2xl border border-white/5 bg-[#111827]">
+                            <Login />
+                          </div>
+                        </div>
                       </PageTransition>
                     </ErrorBoundary>
                   }

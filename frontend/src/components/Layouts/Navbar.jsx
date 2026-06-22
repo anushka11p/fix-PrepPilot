@@ -305,7 +305,7 @@ const Navbar = () => {
       <Modal
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
-        title="Login"
+        hideHeader
       >
         <Login setCurrentPage={() => {}} />
       </Modal>

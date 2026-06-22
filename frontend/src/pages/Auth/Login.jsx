@@ -55,12 +55,9 @@ const Login = ({ setCurrentPage, onLoginSuccess }) => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center p-4 sm:p-8 bg-[#0B0F19] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1a1a2e] via-[#0B0F19] to-[#05080f]">
-      <div className="w-full max-w-[420px] rounded-2xl p-6 sm:p-8 shadow-2xl border border-white/5 relative overflow-hidden bg-[#111827]">
-        {/* Subtle background glow effect for SaaS look */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-32 bg-gradient-to-b from-violet-500/10 to-transparent pointer-events-none" />
-        
-        <div className="relative z-10">
+    <div className="w-full relative">
+
+      <div className="relative z-10">
           {/* Header */}
           <div className="mb-8 text-center sm:text-left">
             <div className="flex items-center justify-center sm:justify-start gap-2 mb-4">
@@ -140,7 +137,6 @@ const Login = ({ setCurrentPage, onLoginSuccess }) => {
           </form>
         </div>
       </div>
-    </div>
   );
 };
 
