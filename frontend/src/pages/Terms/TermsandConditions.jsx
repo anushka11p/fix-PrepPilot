@@ -4,7 +4,7 @@ import {
   LuChevronDown,
   LuFileText,
   LuUser,
-  LuAlertTriangle,
+  LuTriangleAlert,
   LuShield,
   LuGlobe,
   LuArrowLeft,
@@ -77,7 +77,7 @@ const TermsandConditions = () => {
     {
       id: "prohibited",
       title: "Prohibited Conduct",
-      icon: <LuAlertTriangle className="w-5 h-5" />,
+      icon: <LuTriangleAlert className="w-5 h-5" />,
     },
     {
       id: "intellectual",
@@ -87,7 +87,7 @@ const TermsandConditions = () => {
     {
       id: "termination",
       title: "Termination",
-      icon: <LuAlertTriangle className="w-5 h-5" />,
+      icon: <LuTriangleAlert className="w-5 h-5" />,
     },
     {
       id: "liability",
