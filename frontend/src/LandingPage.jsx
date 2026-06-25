@@ -18,6 +18,7 @@ import { UserContext } from "./context/userContext";
 import { motion, AnimatePresence } from "framer-motion";
 import ServicesMarquee from "./components/ServicesMarquee";
 import { Star } from "lucide-react"; // Import Star icon for testimonials
+import TermsandConditions from "./pages/Terms/TermsandConditions";   // ← Add this
 
 
 /* ─────────────────────────────────────────────
@@ -1051,7 +1052,7 @@ const LandingPage = () => {
       <p>© {new Date().getFullYear()} PrepPilot AI. All rights reserved.</p>
       <div className="flex space-x-6">
         <a href="#" className="hover:text-gray-300 transition-colors">Privacy Policy</a>
-        <a href="#" className="hover:text-gray-300 transition-colors">Terms of Service</a>
+        <a href="/terms-and-conditions" className="hover:text-gray-300 transition-colors">Terms of Service</a>
       </div>
     </div>
 
