@@ -2,6 +2,8 @@ const requiredEnvVars = Object.freeze([
   "MONGO_URI",
   "JWT_SECRET",
   "GEMINI_API_KEY",
+  "ADZUNA_APP_ID",
+  "ADZUNA_API_KEY",
 ]);
 
 const validateEnv = () => {

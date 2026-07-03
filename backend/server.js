@@ -18,6 +18,7 @@ const questionRoutes = require("./routes/questionRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 const resumeRoutes = require("./routes/resumeRoutes");
 const aptitudeQuestionsRoutes = require("./routes/AptitudeQuestions.js");
+const jobRoutes = require("./routes/jobRoutes");
 const { generalLimiter, aiLimiter } = require("./middlewares/rateLimiter");
 const { generalHeaders, sensitiveRouteHeaders } = require("./middlewares/securityHeaders");
 // Remove ES Module import for cors. Use CommonJS require below.
@@ -129,6 +130,7 @@ app.use(
 );
 
 app.use("/api/books", generalLimiter, booksRoutes);
+app.use("/api/jobs", generalLimiter, jobRoutes);
 
 //Serve uploads folder
 app.use("/uploads", express.static(path.join(__dirname, "uploads"), {}));
@@ -139,6 +141,11 @@ app.get("/api/test", (req, res) => {
 });
 
 // Remove duplicate CORS middleware (already set above)
+
+// Daily job cache refresh — warm on boot, then every 24 hours
+const { refreshJobCache } = require("./controllers/jobController");
+refreshJobCache();
+setInterval(refreshJobCache, 24 * 60 * 60 * 1000);
 
 // Start Server
 const PORT = process.env.PORT || 5000;
