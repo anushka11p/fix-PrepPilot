@@ -34,6 +34,7 @@ import RepositoryHive from "./pages/OpenSource/RepositoryHive";
 import OSSBlog from "./pages/OpenSource/OSSBlog";
 import OpenSourceEvents from "./pages/OpenSource/OpenSourceEvents";
 import NotesBooks from "./pages/NotesBooks/NotesBooks";
+import JobsForYou from "./pages/Jobs/JobsForYou";
 import HelpSupport from "./pages/Support/HelpSupport";
 import Settings from "./pages/Settings/Settings";
 import NotFound from "./pages/NotFound";
@@ -310,6 +311,16 @@ const App = () => {
                       <ProtectedRoute>
                         <PageTransition>
                           <Settings />
+                        </PageTransition>
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/jobs"
+                    element={
+                      <ProtectedRoute>
+                        <PageTransition>
+                          <JobsForYou />
                         </PageTransition>
                       </ProtectedRoute>
                     }
