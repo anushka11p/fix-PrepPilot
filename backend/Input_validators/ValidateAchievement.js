@@ -1,4 +1,5 @@
 const { z } = require('zod');
+const { handleValidationError } = require('./ValidateQuestions');
 
 const savedAchievementsSchema = z.object({
   unlockedAchievements: z.array(z.string(), {
@@ -12,10 +13,7 @@ const validateSavedAchievements = (req, res, next) => {
     savedAchievementsSchema.parse(req.body);
     next();
   } catch (e) {
-    return res.status(400).json({
-      success: false,
-      error: e.errors?.[0]?.message || 'Invalid input',
-    });
+    return handleValidationError(res, e);
   }
 };
 

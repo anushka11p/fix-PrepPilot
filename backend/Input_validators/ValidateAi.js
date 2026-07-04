@@ -1,4 +1,5 @@
 const { z } = require("zod");
+const { handleValidationError } = require("./ValidateQuestions");
 
 // Schema for interview questions request
 const generateInterviewQuestionsSchema = z.object({
@@ -26,14 +27,7 @@ const validateGenerateInterviewQuestions = (req,res,next)=>{
         generateInterviewQuestionsSchema.parse(req.body);
         next();
     } catch (error) {
-        return res.status(400).json({
-            success: false,
-            message: "Validation failed",
-            errors: err.errors.map(e => ({
-            field: e.path.join("."),
-            message: e.message,
-      })),
-    });
+        return handleValidationError(res, error);
     }
 }
 
@@ -43,14 +37,7 @@ const validateGenerateConceptExplanation = (req,res,next)=>{
         generateConceptExplanationSchema.parse(req.body);
         next();
     } catch (error) {
-        return res.status(400).json({
-            success: false,
-            message: "Validation failed",
-            errors: err.errors.map(e => ({
-            field: e.path.join("."),
-            message: e.message,
-      })),
-    })
+        return handleValidationError(res, error);
 }}
 
 const validateGenerateInterviewTips = (req, res, next) => {
@@ -58,14 +45,7 @@ const validateGenerateInterviewTips = (req, res, next) => {
     generateInterviewTipsSchema.parse(req.body);
     next();
   } catch (error) {
-    return res.status(400).json({
-      success: false,
-      message: "Validation failed",
-      errors: error.errors.map(e => ({
-        field: e.path.join("."),
-        message: e.message,
-      })),
-    });
+    return handleValidationError(res, error);
   }
 };
 

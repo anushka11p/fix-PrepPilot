@@ -1,5 +1,5 @@
 const { z } = require("zod");
-const { refreshToken } = require("../controllers/authController");
+const { handleValidationError } = require("./ValidateQuestions");
 
 const registerUserZod = z.object({
   name: z.string().min(4, "Length of the name should be minimum 4").trim(),
@@ -39,14 +39,7 @@ const validateUserLogin = (req, res, next) => {
     loginUserZod.parse(req.body);
     next();
   } catch (err) {
-    return res.status(400).json({
-      success: false,
-      message: "Validation failed",
-      errors: err.errors.map(e => ({
-        field: e.path.join("."),
-        message: e.message,
-      })),
-    });
+     return handleValidationError(res, error);
   }
 };
 
@@ -56,7 +49,7 @@ const refreshTokenZod = z.object({
 
 const validateRefreshToken = (req, res, next) => {
   try {
-    refreshToken.parse(req.body);
+    refreshTokenZod.parse(req.body);
     next();
   } catch (err) {
     return res.status(400).json({
