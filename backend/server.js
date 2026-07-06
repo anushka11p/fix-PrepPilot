@@ -104,7 +104,6 @@ app.use("/api/user", generalLimiter, userSheetProgressRoutes);
 const achievementRoutes = require("./routes/achievementRoutes");
 app.use("/api/user", generalLimiter, achievementRoutes);
 const booksRoutes = require("./routes/booksRoutes");
-const { required } = require("joi");
 const { validateGenerateInterviewQuestions, validateGenerateConceptExplanation, validateGenerateInterviewTips } = require("./Input_validators/ValidateAi.js");
 app.use("/api/resume", generalLimiter, resumeRoutes);
 

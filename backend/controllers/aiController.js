@@ -1,5 +1,5 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-const Joi = require("joi");
+const { z } = require("zod");
 const {
   conceptExplainPrompt,
   questionAnswerPrompt,
@@ -101,17 +101,15 @@ const generateInterviewQuestions = async (req, res) => {
       const data = JSON.parse(cleanedText);
 
       // Validate Gemini response structure
-      const questionsSchema = Joi.array().items(
-        Joi.object({
-          question: Joi.string().required(),
-          answer: Joi.string().required(),
+      const questionsSchema = z.array(
+        z.object({
+          question: z.string(),
+          answer: z.string(),
         })
       );
-      const { error: validationError } = questionsSchema.validate(
-        Array.isArray(data) ? data : data.question
-      );
-      if (validationError) {
-        return res.status(500).json({ message: "Invalid AI response format", details: validationError.message });
+      const parsed = questionsSchema.safeParse(Array.isArray(data) ? data : data.question);
+      if (!parsed.success) {
+        return res.status(500).json({ message: "Invalid AI response format", details: parsed.error.issues[0]?.message });
       }
 
       if (Array.isArray(data)) {
@@ -197,13 +195,13 @@ const generateConceptExplanation = async (req, res) => {
       const data = JSON.parse(cleanedText);
 
       // Validate Gemini response structure
-      const explanationSchema = Joi.object({
-        title: Joi.string().required(),
-        explanation: Joi.string().required(),
+      const explanationSchema = z.object({
+        title: z.string(),
+        explanation: z.string(),
       });
-      const { error: validationError } = explanationSchema.validate(data);
-      if (validationError) {
-        return res.status(500).json({ message: "Invalid AI response format", details: validationError.message });
+      const parsed = explanationSchema.safeParse(data);
+      if (!parsed.success) {
+        return res.status(500).json({ message: "Invalid AI response format", details: parsed.error.issues[0]?.message });
       }
 
       res.status(200).json({ model: usedModel, ...data });
